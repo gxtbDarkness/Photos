@@ -1,26 +1,57 @@
 <script setup lang="ts">
-import Versions from './components/Versions.vue'
-
-const ipcHandle = () => window.electron.ipcRenderer.send('ping')
+//const ipcHandle = () => window.electron.ipcRenderer.send('ping')
 </script>
 
 <template>
-  <img alt="logo" class="logo" src="./assets/electron.svg" />
-  <div class="creator">Powered by electron-vite</div>
-  <div class="text">
-    Build an Electron app with
-    <span class="vue">Vue</span>
-    and
-    <span class="ts">TypeScript</span>
+  <div class="layout-demo">
+    <a-layout style="height: 100%">
+      <a-layout-header>Header</a-layout-header>
+      <a-layout>
+        <a-layout-content>Content</a-layout-content>
+        <a-layout-sider>Sider</a-layout-sider>
+      </a-layout>
+      <a-layout-footer>Footer</a-layout-footer>
+    </a-layout>
   </div>
-  <p class="tip">Please try pressing <code>F12</code> to open the devTool</p>
-  <div class="actions">
-    <div class="action">
-      <a href="https://electron-vite.org/" target="_blank" rel="noreferrer">Documentation</a>
-    </div>
-    <div class="action">
-      <a target="_blank" rel="noreferrer" @click="ipcHandle">Send IPC</a>
-    </div>
-  </div>
-  <Versions />
 </template>
+
+<style scoped>
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.layout-demo {
+  height: 100vh;
+}
+
+.layout-demo :deep(.arco-layout-header),
+.layout-demo :deep(.arco-layout-footer),
+.layout-demo :deep(.arco-layout-sider-children),
+.layout-demo :deep(.arco-layout-content) {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: var(--color-white);
+  font-size: 16px;
+  font-stretch: condensed;
+  text-align: center;
+}
+
+.layout-demo :deep(.arco-layout-header),
+.layout-demo :deep(.arco-layout-footer) {
+  height: 84px;
+  background-color: var(--color-primary-light-4);
+}
+
+.layout-demo :deep(.arco-layout-sider) {
+  width: 206px;
+  background-color: var(--color-primary-light-3);
+}
+
+.layout-demo :deep(.arco-layout-content) {
+  background-color: rgb(var(--arcoblue-6));
+}
+</style>
