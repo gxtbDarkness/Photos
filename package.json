@@ -23,7 +23,8 @@
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.0",
     "@electron-toolkit/utils": "^3.0.0",
-    "exif-js": "^2.3.0"
+    "exif-js": "^2.3.0",
+    "image-thumbnail": "^1.0.17"
   },
   "devDependencies": {
     "@arco-design/web-vue": "^2.56.1",
