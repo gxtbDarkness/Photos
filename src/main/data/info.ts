@@ -1,6 +1,3 @@
-/**
- * 定义一些数据信息的模型
- */
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const imageThumbnail = require('image-thumbnail')
 import EXIF from 'exif-js'
@@ -11,6 +8,30 @@ class EXIFInfo {
    * @param tag_record tag 的 key-value 形式
    */
   constructor(private readonly tag_record: Record<string, string> = {}) {}
+
+  /**
+   * 获取图片的 exif 信息
+   * @param file 图片文件
+   */
+  static async from_file(file: File): Promise<EXIFInfo> {
+    // 读取文件的二进制数据
+    const buffer = await file.arrayBuffer()
+
+    // 获取图片的 exif 信息
+    const exif = EXIF.readFromBinaryFile(buffer)
+
+    // 获取所有的 tag
+    const tags = EXIF.getAllTags(exif)
+
+    // 将 tags 转换为 key-value 形式
+    const tag_record = {}
+    for (const tag in tags) {
+      tag_record[tag] = tags[tag].toString()
+    }
+
+    // 返回 EXIFData 实例
+    return new EXIFInfo(tag_record)
+  }
 
   /**
    * 获取 tag 的值
@@ -38,30 +59,6 @@ class EXIFInfo {
 }
 
 /**
- * 获取图片的 exif 信息
- * @param file 图片文件
- */
-async function get_exif_data(file: File): Promise<EXIFInfo> {
-  // 读取文件的二进制数据
-  const buffer = await file.arrayBuffer()
-
-  // 获取图片的 exif 信息
-  const exif = EXIF.readFromBinaryFile(buffer)
-
-  // 获取所有的 tag
-  const tags = EXIF.getAllTags(exif)
-
-  // 将 tags 转换为 key-value 形式
-  const tag_record = {}
-  for (const tag in tags) {
-    tag_record[tag] = tags[tag].toString()
-  }
-
-  // 返回 EXIFData 实例
-  return new EXIFInfo(tag_record)
-}
-
-/**
  * 代表一个照片的日期
  */
 class PhotoInfo {
@@ -78,36 +75,31 @@ class PhotoInfo {
     public readonly exif_data: EXIFInfo,
     public readonly thumbnail: string
   ) {}
-}
 
-/**
- * 获取照片信息
- * @param id id
- * @param file 文件
- */
-async function get_photo_date(id: string, file: File): Promise<PhotoInfo> {
-  // 获取 exif 信息
-  const exif_info = await get_exif_data(file)
+  /**
+   * 获取照片信息
+   * @param id id
+   * @param file 文件
+   */
+  static async from_file(id: string, file: File): Promise<PhotoInfo> {
+    // 获取 exif 信息
+    const exif_info = await EXIFInfo.from_file(file)
 
-  // 获取缩略图
-  const url = URL.createObjectURL(file)
+    // 获取缩略图
+    const url = URL.createObjectURL(file)
 
-  // 先尝试获取 exif 中的缩略图
-  const exif_thumbnail = exif_info.get('ThumbnailImage')
-  if (exif_thumbnail != null) {
-    // 如果存在缩略图，则直接返回
-    // TODO: 这里不知道 exif 中的缩略图是什么格式，暂时直接返回
-    return new PhotoInfo(id, file.name, exif_info, exif_thumbnail)
-  } else {
-    // 否则生成缩略图
-    const generated_thumbnail = await imageThumbnail(url)
-    return new PhotoInfo(id, file.name, exif_info, generated_thumbnail)
+    // 先尝试获取 exif 中的缩略图
+    const exif_thumbnail = exif_info.get('ThumbnailImage')
+    if (exif_thumbnail != null) {
+      // 如果存在缩略图，则直接返回
+      // TODO: 这里不知道 exif 中的缩略图是什么格式，暂时直接返回
+      return new PhotoInfo(id, file.name, exif_info, exif_thumbnail)
+    } else {
+      // 否则生成缩略图
+      const generated_thumbnail = await imageThumbnail(url)
+      return new PhotoInfo(id, file.name, exif_info, generated_thumbnail)
+    }
   }
 }
 
-export default {
-  EXIFData: EXIFInfo,
-  PhotoDate: PhotoInfo,
-  get_exif_data,
-  get_photo_date
-}
+export { EXIFInfo, PhotoInfo }
