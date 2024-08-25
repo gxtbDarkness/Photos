@@ -1,5 +1,11 @@
+/**
+ * @file dao.ts
+ * @module data
+ * @description 数据访问对象接口
+ */
+
 import { PhotoInfo } from './info'
-import { Policies } from './class'
+import { Policies } from './policy'
 
 /**
  * 数据访问对象接口，定义了数据访问对象的基本方法

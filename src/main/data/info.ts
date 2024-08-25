@@ -1,3 +1,9 @@
+/**
+ * @file info.ts
+ * @description 图片信息相关的类，包括 EXIF 信息、图片信息等
+ * @module data
+ */
+
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const imageThumbnail = require('image-thumbnail')
 import EXIF from 'exif-js'
@@ -59,13 +65,13 @@ class EXIFInfo {
 }
 
 /**
- * 代表一个照片的日期
+ * 代表一个照片的相关信息
  */
 class PhotoInfo {
   /**
    * 构造函数
    * @param id id
-   * @param file_name 文件名
+   * @param file_name 文件名，包括后缀
    * @param exif_data exif 信息
    * @param thumbnail base64 编码的缩略图
    */
