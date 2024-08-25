@@ -10,6 +10,7 @@ import {
   Test,
   WithContext
 } from './use_cases'
+import { gen_fake_api } from './impl/fake'
 
 /**
  * API 类，包含所有用例
@@ -50,4 +51,19 @@ class API implements WithContext {
   context: Context | null = null
 }
 
-export { type API }
+class APIProvider {
+  private static _api: API | null = null
+
+  static api(): API {
+    if (APIProvider._api !== null) {
+      return APIProvider._api
+    }
+
+    const api = gen_fake_api()
+    APIProvider._api = api
+
+    return api
+  }
+}
+
+export { API, APIProvider }

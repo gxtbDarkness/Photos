@@ -72,13 +72,13 @@ class PhotoInfo {
    * 构造函数
    * @param id id
    * @param file_name 文件名，包括后缀
-   * @param exif_data exif 信息
+   * @param exif_info exif 信息
    * @param thumbnail base64 编码的缩略图
    */
   constructor(
     public readonly id: string,
     public readonly file_name: string,
-    public readonly exif_data: EXIFInfo,
+    public readonly exif_info: EXIFInfo,
     public readonly thumbnail: string
   ) {}
 

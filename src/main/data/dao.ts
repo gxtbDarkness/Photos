@@ -6,6 +6,7 @@
 
 import { PhotoInfo } from './info'
 import { Policies } from './policy'
+import { gen_fake_daos } from './impl/fake'
 
 /**
  * 数据访问对象接口，定义了数据访问对象的基本方法
@@ -72,4 +73,22 @@ class DAOs {
   ) {}
 }
 
-export { type InfosDAO, type SettingsDAO, DAOs }
+/**
+ * DAOs 提供者
+ */
+class DAOsProvider {
+  static path: string | null = null
+  static daos: DAOs | null = null
+
+  static open(path: string): DAOs {
+    if (DAOsProvider.path === path && DAOsProvider.daos !== null) {
+      return DAOsProvider.daos
+    } else {
+      // TODO: 创建 DAOs 实例
+      // 现在先创建 fake DAOs
+      return gen_fake_daos()
+    }
+  }
+}
+
+export { type InfosDAO, type SettingsDAO, DAOs, DAOsProvider }
