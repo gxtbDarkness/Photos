@@ -6,7 +6,7 @@ import { ReorderItem } from '../data/policy'
  * 上下文，包含了 `DAOs` 和照片文件管理器
  * `DAO` 和 `FileManager` 分别对应数据存储库的 `meta` 文件夹和 `photos` 文件夹
  */
-class Context {
+class Context implements WithContext {
   /**
    * 构造函数
    * @param daos 数据访问对象
@@ -16,6 +16,8 @@ class Context {
     public readonly daos: DAOs,
     public readonly file_manager: FileManager
   ) {}
+
+  context: Context | null = this
 }
 
 /**

@@ -5,7 +5,7 @@
  */
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const imageThumbnail = require('image-thumbnail')
+// const imageThumbnail = require('image-thumbnail')
 import EXIF from 'exif-js'
 
 class EXIFInfo {
@@ -92,7 +92,7 @@ class PhotoInfo {
     const exif_info = await EXIFInfo.from_file(file)
 
     // 获取缩略图
-    const url = URL.createObjectURL(file)
+    // const url = URL.createObjectURL(file)
 
     // 先尝试获取 exif 中的缩略图
     const exif_thumbnail = exif_info.get('ThumbnailImage')
@@ -102,7 +102,9 @@ class PhotoInfo {
       return new PhotoInfo(id, file.name, exif_info, exif_thumbnail)
     } else {
       // 否则生成缩略图
-      const generated_thumbnail = await imageThumbnail(url)
+      // TODO: 生成缩略图
+      // const generated_thumbnail = await imageThumbnail(url)
+      const generated_thumbnail = ''
       return new PhotoInfo(id, file.name, exif_info, generated_thumbnail)
     }
   }

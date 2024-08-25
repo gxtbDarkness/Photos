@@ -1,10 +1,4 @@
-/**
- * @module policies
- * @description 一些预定义的重排序策略
- * @file reorder.ts
- */
-
-import { ReorderItem } from '../data/policy'
+import { ReorderItem } from '../../data/policy'
 
 /**
  * 按照文件名的字典序重排序
