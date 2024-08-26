@@ -70,44 +70,48 @@ class EXIFInfo {
 class PhotoInfo {
   /**
    * 构造函数
-   * @param id id
-   * @param file_name 文件名，包括后缀
+   * @param uuid uuid
+   * @param file_name 文件名，不包括后缀
+   * @param extension 文件后缀
+   * @param thumbnail_extension 缩略图后缀
+   * @param upload_time 上传时间，精确到秒的时间戳，从 1970-01-01 00:00:00 开始
    * @param exif_info exif 信息
-   * @param thumbnail base64 编码的缩略图
    */
   constructor(
-    public readonly id: string,
+    public readonly uuid: string,
     public readonly file_name: string,
-    public readonly exif_info: EXIFInfo,
-    public readonly thumbnail: string
+    public readonly extension: string,
+    public readonly thumbnail_extension: string,
+    public readonly upload_time: string,
+    public readonly exif_info: EXIFInfo
   ) {}
 
-  /**
-   * 获取照片信息
-   * @param id id
-   * @param file 文件
-   */
-  static async from_file(id: string, file: File): Promise<PhotoInfo> {
-    // 获取 exif 信息
-    const exif_info = await EXIFInfo.from_file(file)
-
-    // 获取缩略图
-    // const url = URL.createObjectURL(file)
-
-    // 先尝试获取 exif 中的缩略图
-    const exif_thumbnail = exif_info.get('ThumbnailImage')
-    if (exif_thumbnail != null) {
-      // 如果存在缩略图，则直接返回
-      // TODO: 这里不知道 exif 中的缩略图是什么格式，暂时直接返回
-      return new PhotoInfo(id, file.name, exif_info, exif_thumbnail)
-    } else {
-      // 否则生成缩略图
-      // TODO: 生成缩略图
-      // const generated_thumbnail = await imageThumbnail(url)
-      const generated_thumbnail = ''
-      return new PhotoInfo(id, file.name, exif_info, generated_thumbnail)
-    }
-  }
+  // /**
+  //  * 获取照片信息
+  //  * @param uuid uuid
+  //  * @param file 文件
+  //  */
+  // static async from_file(uuid: string, file: File): Promise<PhotoInfo> {
+  //   // 获取 exif 信息
+  //   const exif_info = await EXIFInfo.from_file(file)
+  //
+  //   // 获取缩略图
+  //   // const url = URL.createObjectURL(file)
+  //
+  //   // 先尝试获取 exif 中的缩略图
+  //   const exif_thumbnail = exif_info.get('ThumbnailImage')
+  //   if (exif_thumbnail != null) {
+  //     // 如果存在缩略图，则直接返回
+  //     // TODO: 这里不知道 exif 中的缩略图是什么格式，暂时直接返回
+  //     return new PhotoInfo(uuid, file.name, exif_info, exif_thumbnail)
+  //   } else {
+  //     // 否则生成缩略图
+  //     // TODO: 生成缩略图
+  //     // const generated_thumbnail = await imageThumbnail(url)
+  //     const generated_thumbnail = ''
+  //     return new PhotoInfo(uuid, file.name, exif_info, generated_thumbnail)
+  //   }
+  // }
 }
 
 export { EXIFInfo, PhotoInfo }

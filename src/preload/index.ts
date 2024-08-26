@@ -1,8 +1,9 @@
 import { contextBridge } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
+import { gen_fake_api } from '../main/api/impl/fake'
 
 // Custom APIs for renderer
-const api = {}
+const api = gen_fake_api()
 
 // Use `contextBridge` APIs to expose Electron APIs to
 // renderer only if context isolation is enabled, otherwise

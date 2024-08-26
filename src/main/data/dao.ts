@@ -6,12 +6,22 @@
 
 import { PhotoInfo } from './info'
 import { Policies } from './policy'
-import { gen_fake_daos } from './impl/fake'
 
 /**
  * 数据访问对象接口，定义了数据访问对象的基本方法
  */
 interface InfosDAO {
+  /**
+   * 打开
+   * @param path 元数据存储路径，即 meta 文件夹
+   */
+  open(path: string): Promise<void>
+
+  /**
+   * 是否已经打开
+   */
+  is_opened(): boolean
+
   /**
    * 插入一条数据
    * @param info 数据
@@ -20,9 +30,9 @@ interface InfosDAO {
 
   /**
    * 删除一条数据
-   * @param id 数据 id
+   * @param uuid 照片 uuid
    */
-  delete(id: string): Promise<void>
+  delete(uuid: string): Promise<void>
 
   /**
    * 更新一条数据
@@ -43,9 +53,22 @@ interface InfosDAO {
 }
 
 /**
- * 配置数据访问对象接口，访存排序及分类策略
+ * 配置数据访问对象接口，访存排序及分类策略，可能还有其他配置
+ *
+ * 需要持久化存储到磁盘，例如存储到 JSON 文件中
  */
 interface SettingsDAO {
+  /**
+   * 打开
+   * @param path 元数据存储路径，即 meta 文件夹
+   */
+  open(path: string): Promise<void>
+
+  /**
+   * 是否已经打开
+   */
+  is_opened(): boolean
+
   /**
    * 获取策略
    */
@@ -56,39 +79,45 @@ interface SettingsDAO {
    * @param policies 策略
    */
   set_policies(policies: Policies): Promise<void>
+
+  /**
+   * 根据 key 获取值
+   * @param key key
+   */
+  get_by_key(key: string): Promise<string>
+
+  /**
+   * 设置 key-value
+   * @param key key
+   * @param value value
+   */
+  set_by_key(key: string, value: string): Promise<void>
 }
 
 /**
  * 所有 DAO 接口
  */
-class DAOs {
+interface DAOs {
   /**
-   * 构造函数
-   * @param infos 照片信息 DAO
-   * @param settings 配置 DAO
+   * 打开 DAOs
+   * @param path 元数据存储路径，即 meta 文件夹
    */
-  constructor(
-    public readonly infos: InfosDAO,
-    public readonly settings: SettingsDAO
-  ) {}
+  open(path: string): Promise<void>
+
+  /**
+   * 是否已经打开
+   */
+  is_opened(): boolean
+
+  /**
+   * 获取照片信息 DAO
+   */
+  infos_dao(): InfosDAO
+
+  /**
+   * 获取配置 DAO
+   */
+  settings_dao(): SettingsDAO
 }
 
-/**
- * DAOs 提供者
- */
-class DAOsProvider {
-  static path: string | null = null
-  static daos: DAOs | null = null
-
-  static open(path: string): DAOs {
-    if (DAOsProvider.path === path && DAOsProvider.daos !== null) {
-      return DAOsProvider.daos
-    } else {
-      // TODO: 创建 DAOs 实例
-      // 现在先创建 fake DAOs
-      return gen_fake_daos()
-    }
-  }
-}
-
-export { type InfosDAO, type SettingsDAO, DAOs, DAOsProvider }
+export { type InfosDAO, type SettingsDAO, type DAOs }

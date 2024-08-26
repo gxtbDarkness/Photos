@@ -17,31 +17,14 @@ class Context implements WithContext {
     public readonly file_manager: FileManager
   ) {}
 
-  context: Context | null = this
+  context: Context = this
 }
 
 /**
  * 带有上下文的接口
  */
 interface WithContext {
-  context: Context | null
-}
-
-/**
- * 打开或创建一个照片存储库，返回一个上下文
- */
-interface Open {
-  /**
-   * 创建一个存储库。
-   *
-   * 在这个函数中，需要创建 `meta` 和 `photos` 文件夹，
-   *
-   * 之后，创建 `DAOs` 和 `FileManager` 实例并连接数据库，`SettingsDAO` 只需要使用 Json 存储即可，
-   *
-   * 最后返回一个上下文
-   * @param path 存储库路径
-   */
-  (path: string): Context
+  context: Context
 }
 
 /**
@@ -49,28 +32,28 @@ interface Open {
  */
 interface Import {
   /**
-   * 导入照片文件，需要生成一个照片 id，并将照片文件和元数据存储到对应的文件夹中
+   * 导入照片文件，需要生成一个照片 uuid，并将照片文件和元数据存储到对应的文件夹中
    * @param ctx 上下文
    * @param file 照片文件
-   * @returns 照片 id
+   * @returns 照片 uuid
    */
   (ctx: WithContext, file: File): Promise<string>
 
   /**
-   * 导入照片文件，需要生成多个照片 id，并将照片文件和元数据存储到对应的文件夹中
+   * 导入照片文件，需要生成多个照片 uuid，并将照片文件和元数据存储到对应的文件夹中
    * @param ctx 上下文
    * @param files 多个照片
-   * @returns 照片 id 数组
+   * @returns 照片 uuid 数组
    */
   (ctx: WithContext, files: File[]): Promise<string[]>
 
   /**
-   * 指定 id 导入照片文件，如果 id 已经存在，则报错
+   * 指定 uuid 导入照片文件，如果 uuid 已经存在，则报错
    * @param ctx 上下文
    * @param file 照片文件
-   * @param id 照片 id
+   * @param uuid 照片 uuid
    */
-  (ctx: WithContext, file: File, id: string): Promise<void>
+  (ctx: WithContext, file: File, uuid: string): Promise<void>
 }
 
 /**
@@ -80,9 +63,9 @@ interface Delete {
   /**
    * 删除照片文件
    * @param ctx 上下文
-   * @param id 照片 id
+   * @param uuid 照片 uuid
    */
-  (ctx: WithContext, id: string): Promise<void>
+  (ctx: WithContext, uuid: string): Promise<void>
 }
 
 /**
@@ -92,10 +75,10 @@ interface Get {
   /**
    * 获取照片文件
    * @param ctx 上下文
-   * @param id 照片 id
+   * @param uuid 照片 uuid
    * @returns 照片
    */
-  (ctx: WithContext, id: string): Promise<File>
+  (ctx: WithContext, uuid: string): Promise<File>
 }
 
 /**
@@ -104,11 +87,11 @@ interface Get {
 class ClassificationResult {
   /**
    * 构造函数
-   * @param id 照片 id
+   * @param uuid 照片 uuid
    * @param classification 分类结果，为一个字符串数组，表示分类的路径
    */
   constructor(
-    public readonly id: string,
+    public readonly uuid: string,
     public readonly classification: string[]
   ) {}
 }
@@ -120,20 +103,20 @@ interface Classify {
   /**
    * 对单个照片进行分类，返回分类结果
    * @param ctx 上下文
-   * @param id 照片 id
+   * @param uuid 照片 uuid
    * @returns 分类结果
    * @see ClassificationResult
    */
-  (ctx: WithContext, id: string): Promise<ClassificationResult>
+  (ctx: WithContext, uuid: string): Promise<ClassificationResult>
 
   /**
    * 对多个照片进行分类，返回分类结果数组
    * @param ctx 上下文
-   * @param ids 照片 id 数组
+   * @param uuids 照片 uuid 数组
    * @returns 分类结果数组
    * @see ClassificationResult
    */
-  (ctx: WithContext, ids: string[]): Promise<ClassificationResult[]>
+  (ctx: WithContext, uuids: string[]): Promise<ClassificationResult[]>
 }
 
 /**
@@ -178,7 +161,6 @@ export {
   Context,
   type WithContext,
   ClassificationResult,
-  type Open,
   type Import,
   type Delete,
   type Get,
