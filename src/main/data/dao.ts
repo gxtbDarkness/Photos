@@ -23,6 +23,11 @@ interface InfosDAO {
   is_opened(): boolean
 
   /**
+   * 关闭
+   */
+  close(): Promise<void>
+
+  /**
    * 插入一条数据
    * @param info 数据
    */
@@ -70,6 +75,11 @@ interface SettingsDAO {
   is_opened(): boolean
 
   /**
+   * 关闭
+   */
+  close(): Promise<void>
+
+  /**
    * 获取策略
    */
   get_policies(): Promise<Policies>
@@ -108,6 +118,11 @@ interface DAOs {
    * 是否已经打开
    */
   is_opened(): boolean
+
+  /**
+   * 关闭
+   */
+  close(): Promise<void>
 
   /**
    * 获取照片信息 DAO

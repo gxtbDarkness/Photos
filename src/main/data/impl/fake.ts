@@ -24,6 +24,18 @@ class FakeInfosDAO implements InfosDAO {
   update(info: PhotoInfo): Promise<void> {
     return Promise.resolve(undefined)
   }
+
+  close(): Promise<void> {
+    return Promise.resolve(undefined)
+  }
+
+  is_opened(): boolean {
+    return false
+  }
+
+  open(path: string): Promise<void> {
+    return Promise.resolve(undefined)
+  }
 }
 
 class FakeSettingsDAO implements SettingsDAO {
@@ -42,10 +54,57 @@ class FakeSettingsDAO implements SettingsDAO {
   set_policies(policies: Policies): Promise<void> {
     return Promise.resolve(undefined)
   }
+
+  close(): Promise<void> {
+    return Promise.resolve(undefined)
+  }
+
+  get_by_key(key: string): Promise<string> {
+    return Promise.resolve('')
+  }
+
+  is_opened(): boolean {
+    return false
+  }
+
+  open(path: string): Promise<void> {
+    return Promise.resolve(undefined)
+  }
+
+  set_by_key(key: string, value: string): Promise<void> {
+    return Promise.resolve(undefined)
+  }
+}
+
+class FakeDAOs implements DAOs {
+  constructor(
+    private _infos_dao: InfosDAO,
+    private _settings_dao: SettingsDAO
+  ) {}
+
+  close(): Promise<void> {
+    return Promise.resolve(undefined)
+  }
+
+  infos_dao(): InfosDAO {
+    return this._infos_dao
+  }
+
+  is_opened(): boolean {
+    return false
+  }
+
+  open(path: string): Promise<void> {
+    return Promise.resolve(undefined)
+  }
+
+  settings_dao(): SettingsDAO {
+    return this._settings_dao
+  }
 }
 
 function gen_fake_daos(): DAOs {
-  return new DAOs(new FakeInfosDAO(), new FakeSettingsDAO())
+  return new FakeDAOs(new FakeInfosDAO(), new FakeSettingsDAO())
 }
 
 export { gen_fake_daos }

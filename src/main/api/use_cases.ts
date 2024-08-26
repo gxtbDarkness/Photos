@@ -24,6 +24,9 @@ class Context implements WithContext {
  * 带有上下文的接口
  */
 interface WithContext {
+  /**
+   * 上下文，包含了 `DAOs` 和照片文件管理器
+   */
   context: Context
 }
 
@@ -33,27 +36,24 @@ interface WithContext {
 interface Import {
   /**
    * 导入照片文件，需要生成一个照片 uuid，并将照片文件和元数据存储到对应的文件夹中
-   * @param ctx 上下文
    * @param file 照片文件
    * @returns 照片 uuid
    */
-  (ctx: WithContext, file: File): Promise<string>
+  (this: WithContext, file: File): Promise<string>
 
   /**
    * 导入照片文件，需要生成多个照片 uuid，并将照片文件和元数据存储到对应的文件夹中
-   * @param ctx 上下文
    * @param files 多个照片
    * @returns 照片 uuid 数组
    */
-  (ctx: WithContext, files: File[]): Promise<string[]>
+  (this: WithContext, files: File[]): Promise<string[]>
 
   /**
    * 指定 uuid 导入照片文件，如果 uuid 已经存在，则报错
-   * @param ctx 上下文
    * @param file 照片文件
    * @param uuid 照片 uuid
    */
-  (ctx: WithContext, file: File, uuid: string): Promise<void>
+  (this: WithContext, file: File, uuid: string): Promise<void>
 }
 
 /**
@@ -62,10 +62,9 @@ interface Import {
 interface Delete {
   /**
    * 删除照片文件
-   * @param ctx 上下文
    * @param uuid 照片 uuid
    */
-  (ctx: WithContext, uuid: string): Promise<void>
+  (this: WithContext, uuid: string): Promise<void>
 }
 
 /**
@@ -74,11 +73,10 @@ interface Delete {
 interface Get {
   /**
    * 获取照片文件
-   * @param ctx 上下文
    * @param uuid 照片 uuid
    * @returns 照片
    */
-  (ctx: WithContext, uuid: string): Promise<File>
+  (this: WithContext, uuid: string): Promise<File>
 }
 
 /**
@@ -102,21 +100,19 @@ class ClassificationResult {
 interface Classify {
   /**
    * 对单个照片进行分类，返回分类结果
-   * @param ctx 上下文
    * @param uuid 照片 uuid
    * @returns 分类结果
    * @see ClassificationResult
    */
-  (ctx: WithContext, uuid: string): Promise<ClassificationResult>
+  (this: WithContext, uuid: string): Promise<ClassificationResult>
 
   /**
    * 对多个照片进行分类，返回分类结果数组
-   * @param ctx 上下文
    * @param uuids 照片 uuid 数组
    * @returns 分类结果数组
    * @see ClassificationResult
    */
-  (ctx: WithContext, uuids: string[]): Promise<ClassificationResult[]>
+  (this: WithContext, uuids: string[]): Promise<ClassificationResult[]>
 }
 
 /**
@@ -125,11 +121,10 @@ interface Classify {
 interface Reorder {
   /**
    * 对分类结果或者照片进行重排序
-   * @param ctx 上下文
    * @param items 一个带有 id 的数组，表示分类结果或者照片
    * @returns 重排序后的分类结果
    */
-  (ctx: WithContext, items: ReorderItem[]): Promise<ReorderItem[]>
+  (this: WithContext, items: ReorderItem[]): Promise<ReorderItem[]>
 }
 
 /**
@@ -138,12 +133,11 @@ interface Reorder {
 interface Export {
   /**
    * 导出分类结果
-   * @param ctx 上下文
    * @param path 导出路径
    * @param manifest 是否导出归档数据
    * @param photos 是否导出照片
    */
-  (ctx: WithContext, path: string, manifest: boolean, photos: boolean): Promise<void>
+  (this: WithContext, path: string, manifest: boolean, photos: boolean): Promise<void>
 }
 
 /**
@@ -152,9 +146,8 @@ interface Export {
 interface Test {
   /**
    * 测试函数，用来测试数据库连接等
-   * @param ctx 上下文
    */
-  (ctx: WithContext): void
+  (this: WithContext): string
 }
 
 export {

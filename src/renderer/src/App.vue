@@ -1,5 +1,9 @@
 <script setup lang="ts">
-//const ipcHandle = () => window.electron.ipcRenderer.send('ping')
+// const ipcHandle = () => window.electron.ipcRenderer.send('ping')
+
+const api = window.api
+console.log(api)
+// const opened = 123
 </script>
 
 <template>
@@ -10,7 +14,7 @@
         <a-layout-content>Content</a-layout-content>
         <a-layout-sider>Sider</a-layout-sider>
       </a-layout>
-      <a-layout-footer>Footer</a-layout-footer>
+      <a-layout-footer>{{ api.test() }}</a-layout-footer>
     </a-layout>
   </div>
 </template>

@@ -25,6 +25,16 @@ interface FileManager {
   open(path: string): Promise<void>
 
   /**
+   * 判断文件夹是否已经打开
+   */
+  is_opened(): boolean
+
+  /**
+   * 关闭
+   */
+  close(): Promise<void>
+
+  /**
    * 上传文件，文件名为 uuid 编码后加上拓展名
    * @see FileManager
    * @param file 文件

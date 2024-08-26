@@ -17,6 +17,14 @@ class FakeFileManager implements FileManager {
     return ''
   }
 
+  close(): Promise<void> {
+    return Promise.resolve(undefined)
+  }
+
+  is_opened(): boolean {
+    return false
+  }
+
   get(uuid: string, extension: string): Promise<File> {
     return Promise.resolve(new File([], ''))
   }

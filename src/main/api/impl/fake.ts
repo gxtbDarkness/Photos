@@ -4,11 +4,11 @@ import { API } from '../api'
 import { gen_fake_daos } from '../../data/impl/fake'
 import { gen_fake_file_manager } from '../../files/impl/fake'
 
-function fake_import(ctx: WithContext, file: File): Promise<string>
-function fake_import(ctx: WithContext, files: File[]): Promise<string[]>
-function fake_import(ctx: WithContext, file: File, id: string): Promise<void>
+function fake_import(this: WithContext, file: File): Promise<string>
+function fake_import(this: WithContext, files: File[]): Promise<string[]>
+function fake_import(this: WithContext, file: File, id: string): Promise<void>
 function fake_import(
-  ctx: WithContext,
+  this: WithContext,
   arg1: File | File[],
   arg2?: string
 ): Promise<string> | Promise<string[]> | Promise<void> {
@@ -23,18 +23,18 @@ function fake_import(
   }
 }
 
-function fake_delete(ctx: WithContext, id: string): Promise<void> {
+function fake_delete(this: WithContext, id: string): Promise<void> {
   return Promise.resolve()
 }
 
-function fake_get(ctx: WithContext, id: string): Promise<File> {
+function fake_get(this: WithContext, id: string): Promise<File> {
   return Promise.resolve(new File([], ''))
 }
 
-function fake_classify(ctx: WithContext, id: string): Promise<ClassificationResult>
-function fake_classify(ctx: WithContext, ids: string[]): Promise<ClassificationResult[]>
+function fake_classify(this: WithContext, id: string): Promise<ClassificationResult>
+function fake_classify(this: WithContext, ids: string[]): Promise<ClassificationResult[]>
 function fake_classify(
-  ctx: WithContext,
+  this: WithContext,
   arg: string | string[]
 ): Promise<ClassificationResult> | Promise<ClassificationResult[]> {
   if (typeof arg === 'string') {
@@ -44,12 +44,12 @@ function fake_classify(
   }
 }
 
-function fake_reorder(ctx: WithContext, items: ReorderItem[]): Promise<ReorderItem[]> {
+function fake_reorder(this: WithContext, items: ReorderItem[]): Promise<ReorderItem[]> {
   return Promise.resolve(items)
 }
 
 function fake_export(
-  ctx: WithContext,
+  this: WithContext,
   path: string,
   manifest: boolean,
   photos: boolean
@@ -57,7 +57,9 @@ function fake_export(
   return Promise.resolve()
 }
 
-function fake_test(ctx: WithContext): void {}
+function fake_test(this: WithContext): string {
+  return 'test'
+}
 
 function gen_fake_api(): API {
   return new API(
